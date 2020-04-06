@@ -77,4 +77,19 @@ public class MailService {
 
         mailSender.send(mimeMessagePreparator);
     }
+
+    public void sendMail(String[] recipients, String subject, String templateName, Map<String, Object> datas,
+                         String[] attachments) {
+        MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
+
+            @Override
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, ISMULTIPART, encoding);
+                composeMessageHeader(recipients, subject, attachments, messageHelper);
+                messageHelper.setText(contentBuilder.buildMessage(templateName, datas), ISHTML);
+            }
+        };
+
+        mailSender.send(mimeMessagePreparator);
+    }
 }
