@@ -74,7 +74,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
 
     private void sendHtmlTemplateMessageWithInlineImage_imageByteArray() throws Exception {
         String[] messages = {"Spring WebFlux: a basic CRUD application (part 1)"};
-        Path p = Paths.get("girl.png");
+        Path p = Paths.get("images/girl.png");
         byte[] image = Files.readAllBytes(p);
         String contentType = FileTypeMap.getDefaultFileTypeMap().getContentType(p.toFile());
 
