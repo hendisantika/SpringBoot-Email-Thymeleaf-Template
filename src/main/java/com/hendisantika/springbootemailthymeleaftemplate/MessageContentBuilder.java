@@ -1,5 +1,9 @@
 package com.hendisantika.springbootemailthymeleaftemplate;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
 import java.util.Map;
 
 /**
@@ -11,6 +15,16 @@ import java.util.Map;
  * Date: 06/04/20
  * Time: 14.03
  */
-public interface MessageContentBuilder {
-    String buildMessage(String templateName, Map<String, Object> datas);
+public class MessageContentBuilder {
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    public String buildMessage(String templateName, Map<String, Object> datas) {
+        Context context = new Context();
+        for (Map.Entry<String, Object> entry : datas.entrySet()) {
+            context.setVariable(entry.getKey(), entry.getValue());
+        }
+        return templateEngine.process(templateName, context);
+    }
+
 }
