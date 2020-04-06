@@ -5,6 +5,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +47,21 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
         datas.put("messages", messages);
         try {
             mailService.sendMail(RECIPIENTS, SUBJECT, "MailTemplate1", datas, new String[]{"proba.txt"});
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void sendHtmlTemplateMessageWithInlineImage_imageFileName() {
+        String[] messages = {"Build and deploy a Spring Boot app on Minikube (part 1)"};
+        Path p = Paths.get("images/ninja.jpg");
+
+        Map<String, Object> datas = new HashMap<>();
+        datas.put("messages", messages);
+        datas.put("imageResourceName", p.getFileName().toString());
+        try {
+            mailService.sendMailWithInlineImage(RECIPIENTS, SUBJECT, "MailTemplate2", datas,
+                    new String[]{"proba.txt"}, p.getFileName().toString(), "proba.jpg");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
