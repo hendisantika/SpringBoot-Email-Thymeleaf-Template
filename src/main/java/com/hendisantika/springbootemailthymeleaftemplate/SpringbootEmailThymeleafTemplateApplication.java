@@ -5,6 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SpringBootApplication
 public class SpringbootEmailThymeleafTemplateApplication implements CommandLineRunner {
 
@@ -34,5 +37,16 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
             System.out.println(ex.getMessage());
         }
 
+    }
+
+    private void sendHtmlTemplateMessage() {
+        String[] messages = {"Containerizing your Spring boot application with Docker"};
+        Map<String, Object> datas = new HashMap<>();
+        datas.put("messages", messages);
+        try {
+            mailService.sendMail(RECIPIENTS, SUBJECT, "MailTemplate1", datas, new String[]{"proba.txt"});
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }
