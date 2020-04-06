@@ -5,8 +5,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.activation.FileTypeMap;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +48,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
         String[] messages = {"Containerizing your Spring boot application with Docker"};
         Map<String, Object> datas = new HashMap<>();
         datas.put("messages", messages);
+        datas.put("tanggal", LocalDateTime.now());
         try {
             mailService.sendMail(RECIPIENTS, SUBJECT, "MailTemplate1", datas, new String[]{"proba.txt"});
         } catch (Exception ex) {
@@ -58,10 +62,29 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
 
         Map<String, Object> datas = new HashMap<>();
         datas.put("messages", messages);
+        datas.put("tanggal", LocalDateTime.now());
         datas.put("imageResourceName", p.getFileName().toString());
         try {
             mailService.sendMailWithInlineImage(RECIPIENTS, SUBJECT, "MailTemplate2", datas,
                     new String[]{"proba.txt"}, p.getFileName().toString(), "proba.jpg");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void sendHtmlTemplateMessageWithInlineImage_imageByteArray() throws Exception {
+        String[] messages = {"Spring WebFlux: a basic CRUD application (part 1)"};
+        Path p = Paths.get("girl.png");
+        byte[] image = Files.readAllBytes(p);
+        String contentType = FileTypeMap.getDefaultFileTypeMap().getContentType(p.toFile());
+
+        Map<String, Object> datas = new HashMap<>();
+        datas.put("messages", messages);
+        datas.put("tanggal", LocalDateTime.now());
+        datas.put("imageResourceName", p.getFileName().toString());
+        try {
+            mailService.sendMailWithInlineImage(RECIPIENTS, SUBJECT, "MailTemplate2", datas, new String[]{"proba.txt"}
+                    , p.getFileName().toString(), image, contentType);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
