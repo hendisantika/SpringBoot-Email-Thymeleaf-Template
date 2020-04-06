@@ -92,4 +92,18 @@ public class MailService {
 
         mailSender.send(mimeMessagePreparator);
     }
+
+    public void sendMailText(String[] recipients, String subject, String message, String[] attachments) {
+        MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
+
+            @Override
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, ISMULTIPART, encoding);
+                composeMessageHeader(recipients, subject, attachments, messageHelper);
+                messageHelper.setText(message, !ISHTML);
+            }
+        };
+
+        mailSender.send(mimeMessagePreparator);
+    }
 }
