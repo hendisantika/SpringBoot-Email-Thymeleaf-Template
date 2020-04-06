@@ -3,6 +3,7 @@ package com.hendisantika.springbootemailthymeleaftemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -10,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -50,6 +52,26 @@ public class MailService {
                 composeMessageHeader(recipients, subject, attachments, messageHelper);
                 messageHelper.setText(contentBuilder.buildMessage(templateName, datas), ISHTML);
                 messageHelper.addInline(imageResourceName, imageSource, imageContentType);
+            }
+        };
+
+        mailSender.send(mimeMessagePreparator);
+    }
+
+    public void sendMailWithInlineImage(String[] recipients, String subject, String templateName,
+                                        Map<String, Object> datas, String[] attachments, String imageResourceName,
+                                        String imageFileName) {
+
+        final FileSystemResource image = new FileSystemResource(new File(imageFileName));
+
+        MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
+
+            @Override
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, ISMULTIPART, encoding);
+                composeMessageHeader(recipients, subject, attachments, messageHelper);
+                messageHelper.setText(contentBuilder.buildMessage(templateName, datas), ISHTML);
+                messageHelper.addInline(imageResourceName, image);
             }
         };
 
