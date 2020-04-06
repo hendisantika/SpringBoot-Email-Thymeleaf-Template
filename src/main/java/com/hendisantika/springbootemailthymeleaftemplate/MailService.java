@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.Map;
@@ -105,5 +106,18 @@ public class MailService {
         };
 
         mailSender.send(mimeMessagePreparator);
+    }
+
+    private void composeMessageHeader(String[] recipients, String subject, String[] attachments,
+                                      MimeMessageHelper messageHelper) throws MessagingException {
+        messageHelper.setFrom(from);
+        messageHelper.setTo(recipients);
+        messageHelper.setSubject(subject);
+        if (attachments != null) {
+            for (String filename : attachments) {
+                FileSystemResource file = new FileSystemResource(filename);
+                messageHelper.addAttachment(file.getFilename(), file);
+            }
+        }
     }
 }
