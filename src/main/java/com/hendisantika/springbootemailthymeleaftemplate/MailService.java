@@ -2,8 +2,15 @@ package com.hendisantika.springbootemailthymeleaftemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
+
+import javax.mail.internet.MimeMessage;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,4 +35,24 @@ public class MailService {
 
     @Value("${mail.from}")
     private String from;
+
+    public void sendMailWithInlineImage(String[] recipients, String subject, String templateName,
+                                        Map<String, Object> datas, String[] attachments, String imageResourceName,
+                                        byte[] imageBytes, String imageContentType) {
+
+        final InputStreamSource imageSource = new ByteArrayResource(imageBytes);
+
+        MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
+
+            @Override
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, ISMULTIPART, encoding);
+                composeMessageHeader(recipients, subject, attachments, messageHelper);
+                messageHelper.setText(contentBuilder.buildMessage(templateName, datas), ISHTML);
+                messageHelper.addInline(imageResourceName, imageSource, imageContentType);
+            }
+        };
+
+        mailSender.send(mimeMessagePreparator);
+    }
 }
