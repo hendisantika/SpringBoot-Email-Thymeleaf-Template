@@ -22,7 +22,6 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
     @Autowired
     private MailService mailService;
 
-
     public static void main(String[] args) {
         SpringApplication.run(SpringbootEmailThymeleafTemplateApplication.class, args);
     }
@@ -37,7 +36,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
 
     private void sendNormalTextMessage() {
         try {
-            mailService.sendMailText(RECIPIENTS, SUBJECT, "Ez egy lev�l t�rzs", new String[]{"proba.txt"});
+            mailService.sendMailText(RECIPIENTS, SUBJECT, "JVM Indonesia", new String[]{"tes.txt"});
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -50,7 +49,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
         datas.put("messages", messages);
         datas.put("tanggal", LocalDateTime.now());
         try {
-            mailService.sendMail(RECIPIENTS, SUBJECT, "MailTemplate1", datas, new String[]{"proba.txt"});
+            mailService.sendMail(RECIPIENTS, SUBJECT, "MailTemplate1", datas, new String[]{"tes.txt"});
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -58,7 +57,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
 
     private void sendHtmlTemplateMessageWithInlineImage_imageFileName() {
         String[] messages = {"Build and deploy a Spring Boot app on Minikube (part 1)"};
-        Path p = Paths.get("images/ninja.jpg");
+        Path p = Paths.get("ninja.jpg");
 
         Map<String, Object> datas = new HashMap<>();
         datas.put("messages", messages);
@@ -66,7 +65,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
         datas.put("imageResourceName", p.getFileName().toString());
         try {
             mailService.sendMailWithInlineImage(RECIPIENTS, SUBJECT, "MailTemplate2", datas,
-                    new String[]{"proba.txt"}, p.getFileName().toString(), "proba.jpg");
+                    new String[]{"tes.txt"}, p.getFileName().toString(), "ninja.jpeg");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -74,7 +73,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
 
     private void sendHtmlTemplateMessageWithInlineImage_imageByteArray() throws Exception {
         String[] messages = {"Spring WebFlux: a basic CRUD application (part 1)"};
-        Path p = Paths.get("images/girl.png");
+        Path p = Paths.get("girl.png");
         byte[] image = Files.readAllBytes(p);
         String contentType = FileTypeMap.getDefaultFileTypeMap().getContentType(p.toFile());
 
@@ -83,7 +82,7 @@ public class SpringbootEmailThymeleafTemplateApplication implements CommandLineR
         datas.put("tanggal", LocalDateTime.now());
         datas.put("imageResourceName", p.getFileName().toString());
         try {
-            mailService.sendMailWithInlineImage(RECIPIENTS, SUBJECT, "MailTemplate2", datas, new String[]{"proba.txt"}
+            mailService.sendMailWithInlineImage(RECIPIENTS, SUBJECT, "MailTemplate2", datas, new String[]{"tes.txt"}
                     , p.getFileName().toString(), image, contentType);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

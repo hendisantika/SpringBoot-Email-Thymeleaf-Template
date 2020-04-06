@@ -1,6 +1,7 @@
 package com.hendisantika.springbootemailthymeleaftemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -15,6 +16,7 @@ import java.util.Map;
  * Date: 06/04/20
  * Time: 14.03
  */
+@Service
 public class MessageContentBuilder {
     @Autowired
     private TemplateEngine templateEngine;
