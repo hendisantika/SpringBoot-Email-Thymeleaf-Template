@@ -17,7 +17,7 @@ import java.util.Map;
 public class SpringbootEmailThymeleafTemplateApplication implements CommandLineRunner {
 
     private static final String[] RECIPIENTS = {"hendisantika@yahoo.co.id"};
-    private static final String SUBJECT = "Spring Boot Email Thymelef Template";
+    private static final String SUBJECT = "Spring Boot Email Thymeleaf Template";
 
     @Autowired
     private MailService mailService;
